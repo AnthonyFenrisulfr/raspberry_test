@@ -1,3 +1,7 @@
+Videos de ayuda
+    https://www.youtube.com/watch?v=75dfGwYwpUw&ab_channel=Gidahatari
+    https://gidahatari.com/ih-es/tutorial-para-medir-temperatura-con-una-raspberry-pi
+
 Configuración del entorno para el uso de la Raspberry Pi 3 V2.
 
 -Descargar el programa Raspberry Pi Imager
@@ -40,3 +44,17 @@ Configuración del entorno para el uso de la Raspberry Pi 3 V2.
     
 -Instalar node js
     nvm install node
+    
+-Instalar Git
+    sudo apt install git
+
+-Instalat Visual Studio Code
+    sudo apt update
+    nvm install node
+
+-Instalar en el proyecto:
+    npm init --yes
+    npm install nodemon -D
+    npm install mqtt
+    npm install mqtt jsonschema@1.2.6 mosca
+    
