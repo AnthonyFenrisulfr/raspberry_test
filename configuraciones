@@ -1,0 +1,42 @@
+Configuración del entorno para el uso de la Raspberry Pi 3 V2.
+
+-Descargar el programa Raspberry Pi Imager
+    Este programa sirve para descargas algún sistema operativo en la memoria SD de la tarjeta.
+    https://www.raspberrypi.com/software/
+  
+-Activar el protocolo SSH en la raspberry
+    Después de instalar el SO extraer la SD y volver a conectarla.
+    Abrir la ruta de la SD con CMD
+    Ingresar el comando: type nul > ssh (se crea un archivo que habilita el protocolo)
+    
+-Conectar la raspberry a la red para que le sea asignada una dirección IP.
+ 
+-Obtener la IP de la tarjeta.
+    Instalar el programa Advanced IP Scanner
+    Este programa escanea todas las direcciones IP de la red.
+    https://www.advanced-ip-scanner.com/es/
+    
+-Ingresar a la raspberry con el comando:
+    ssh [usuario]@[ip de la tarjeta]
+    Ingresar contraseña
+    
+-Habilitar VCN server con el comando:
+    Esta configuración sirve para ver el escritorio de la raspberry en la computadora que se conecta.
+    sudo raspi-config
+    Interfacing options
+    VCN
+    Habilitar VCN server
+    
+
+-Instalar programa VCN Viwer
+    en el se despliega el escritorio de la raspberry
+    https://www.realvnc.com/es/connect/download/viewer/
+    
+-Intalar el gestor de paquetes NVM
+    https://github.com/nvm-sh/nvm
+    comando:
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+    source ~/bashrc
+    
+-Instalar node js
+    nvm install node
