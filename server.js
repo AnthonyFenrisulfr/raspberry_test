@@ -9,7 +9,3 @@ server.on('ready', () => {
 server.on('clientConnected', (data) => {
     console.log(`A new client is connected. Client: ${data.id}`);
 });
-
-/* server.on('published', (packet) => {
-    console.log(packet.payload.toString());
-}); */

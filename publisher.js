@@ -1,21 +1,24 @@
 // Se importa el módulo MQTT
 const mqtt = require('mqtt');
 
-// Parámetros para la cenexión al broker
-const host = '192.168.1.80';
+// Conexión al servidor
+// const host = '192.168.1.80';
+const host = 'localhost';
 const port = 3000;
 
-// Conexión al servidor
 const pub = mqtt.connect(`mqtt://${host}:${port}`);
 
-// Publicación
+// Publicación de un tópico
 var topic = 'test_topic';
-var cont = 1;
 
 pub.on('connect', () => {
+    let serieSensor = '1';
     setInterval(() => {
-        console.log(`Se envió el mensaje ${cont}`);
-        pub.publish(topic, `Mensaje ${cont}`);
-        cont = cont + 1;
+        let temp = Math.random() * 100;
+        let hum = Math.floor(Math.random() * 30);
+
+
+
+        pub.publish(topic, '');
     }, 2000);
 });
