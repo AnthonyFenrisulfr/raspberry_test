@@ -46,7 +46,9 @@ sub.on('connect', () => {
 });
 
 sub.on('message', (topic, message) => {
-    console.log(message.toString());
+    let parametros = message.toString().split('/');
+    create(parametros[0], parametros[1], parametros[2]);
+    console.log(`Sensor número: ${parametros[0]}\nTemperatura: ${parametros[1]}°C\nHumedad: ${parametros[2]}%`);
 });
 
 
@@ -90,8 +92,4 @@ async function create(serie, temp, hum) {
 
     await data.save();
 }
-
-// LLAMADOS A LAS FUNCIONES
-// create('1', '24', '16%');
-// read();
 

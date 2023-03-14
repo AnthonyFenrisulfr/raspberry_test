@@ -12,13 +12,10 @@ const pub = mqtt.connect(`mqtt://${host}:${port}`);
 var topic = 'test_topic';
 
 pub.on('connect', () => {
-    let serieSensor = '1';
-    setInterval(() => {
-        let temp = Math.random() * 100;
-        let hum = Math.floor(Math.random() * 30);
+    let serieSensor = '1000001';
+    let temp = (Math.random() * 100).toFixed(2).toString();
+    let hum = (Math.floor(Math.random() * 30)).toString();
+    pub.publish(topic, `${serieSensor}/${temp}/${hum}`);
 
-
-
-        pub.publish(topic, '');
-    }, 2000);
+    console.log(`Sensor número: ${serieSensor}\nTemperatura: ${temp}°C\nHumedad: ${hum}%`);
 });
