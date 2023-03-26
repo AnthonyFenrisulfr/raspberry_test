@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 // Conexión con el servidor MQTT
 const host = "localhost";
 const port = 3000;
-
 const sub = mqtt.connect(`mqtt://${host}:${port}`);
 
 // Conexión con la base de datos Mongo DB
@@ -30,11 +29,12 @@ const dbSchema = mongoose.Schema({
 const dbModel = mongoose.model(collection, dbSchema);
 
 // Suscripción al tópico
-var topic = "sensor_1/#";
+var main_topic = 'sensor_1/temp-hum';
+
 sub.on("connect", () => {
-    sub.subscribe(topic, (error) => {
+    sub.subscribe(main_topic, (error) => {
         if (!error) {
-            console.log(`Subscribed to topic ${topic}`);
+            console.log(`Subscribed to topic ${main_topic}`);
         } else {
             console.log("Subscription error");
         }
@@ -42,18 +42,12 @@ sub.on("connect", () => {
 });
 
 sub.on("message", (topic, message) => {
-    console.log(`\nData:\n${message.toString()}\n`);
+    console.log(`Received data:\n${message.toString()}`);
     create(message);
 
 });
 
 // FUNCIONES ***************************************************************
-
-// Función que devuelve todos los documentos de la base de datos
-async function read() {
-    let data = await dbModel.find();
-    console.log(data);
-}
 
 // Función que crea un nuevo registro en la base de datos
 async function create(message) {
@@ -63,6 +57,5 @@ async function create(message) {
     for (const i in json_msj) {
         data[i] = json_msj[i];
     }
-    
     await data.save();
 }

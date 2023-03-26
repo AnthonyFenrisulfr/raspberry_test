@@ -1,44 +1,81 @@
-#Código que lee los valores de temperatura y humedad proporcionados por el sensor
-#DHT11 conectado a una Raspberry pi 3 B
+"""
+import paho.mqtt.client as mqtt
+import adafruit_dht
+import sys
+import time
+import json
 
-# import adafruit_dht
-# import paho.mqtt.client as mqtt
-# import sys
-# import time
-# import json
+pin = 18
+#sensor = adafruit_dht.DHT11(pin)
 
-# PIN = 18
-# SENSOR = adafruit_dht.DHT11(PIN)
+req_interval = 300
 
-# DATA = {}
-# DATA['id_sensor'] = 1
+# Configuración del servidor MQTT
+host = '192.168.1.80'
+port = 3000
+user = ''
+password = ''
+recon_time = 60
 
-# client = mqtt.Client()
-# client.connect('192.168.1.80', 3000, 60, "")
+# Temas MQTT
+main_topic = 'sensor_1/temp-hum'
+req_topic = 'sensor_1/solicitud/temp-hum'
 
-# while True:
-#     try:
-#         humidity = SENSOR.humidity
-#         temperature = SENSOR.temperature
-#         humidity = 19
-#         temperature = 25
+# Se crea el objeto para publicar los datos del sensor
+data = {}
+data['id_sensor'] = 1
+
+# Conexión al servidor MQTT
+client = mqtt.Client()
+client.connect(host, port, recon_time)
+
+# Funciones
+def on_connect(client, userdata, flags, rc):
+    print('Connected to MQTT server...')
+    client.subscribe(req_topic)
+    print('Waiting requests...')
+    
+def on_message(client, userdata, msj):
+    print('Received request')
+    getData()
+
+def getData():    
+    try:
+        # Inicializando el sensor
+        sensor = adafruit_dht.DHT11(pin)
+        humidity = sensor.humidity
+        temperature = sensor.temperature
+            
+        data["values"] = { 'temperature': temperature, 'humidity': humidity }
+        data['time'] = time.strftime("%H:%M:%S")
+        data['date'] = time.strftime("%d/%B/%Y")
+            
+        data_out = json.dumps(data)
+        client.publish(main_topic, data_out)
+        print('Sending data...')
+        sensor.exit()
         
-#         DATA["values"] = { 'temperature': temperature, 'humidity': humidity }
-#         DATA['time'] = time.strftime("%H:%M:%S")
-#         DATA['date'] = time.strftime("%d/%B/%Y")
-        
-#         DATA_OUT = json.dumps(DATA)
-        
-#         client.publish('sensor_1/temp-hum', DATA_OUT)
-#         print('Sending data...')
-        
-#     except RuntimeError as error:
-#         print(error.args[0])
-#         #sensor.exit()
-#         time.sleep(5)
-#         continue
-        
-#     except Exception as error:
-#         #sensor.exit()
-#         raise error
-#     time.sleep(10.0)
+    except RuntimeError as error:
+        print(error.args[0])
+        sensor.exit()
+        time.sleep(1)
+            
+    except Exception as error:
+        raise error
+        sensor.exit()
+    time.sleep(1)
+    
+# Callbacks
+client.on_connect = on_connect
+client.on_message = on_message
+
+#Ciclo principal
+client.loop_start()
+
+while True:
+    getData()
+    time.sleep(req_interval)
+
+client.loop_stop()
+client.disconnect()
+"""
