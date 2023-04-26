@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 
 // Conexión con el servidor MQTT
 const host = "localhost";
-const port = 3000;
+const port = 4009;
 const sub = mqtt.connect(`mqtt://${host}:${port}`);
 
 // Conexión con la base de datos Mongo DB
-const DB = 'prueba';
-const collection = 'datos_sensores';
+const DB = 'calidad_del_agua';
+const collection = 'datos_de_sensores';
 const uri = `mongodb://0.0.0.0/${DB}`;
 
 mongoose.connect(uri)
@@ -17,13 +17,15 @@ mongoose.connect(uri)
 
 // Definición de la estructura del modelo
 const dbSchema = mongoose.Schema({
-    id_sensor: Number,
-    values: {
-        temperature: Number,
-        humidity: Number
-    },
+    date: String,
     time: String,
-    date: String
+    sensors: [{
+        sensor_name: String,
+        values: {
+            temperature: Number,
+            humidity: Number
+        }
+    }]
 }, { versionKey: false });
 
 const dbModel = mongoose.model(collection, dbSchema);
@@ -44,7 +46,6 @@ sub.on("connect", () => {
 sub.on("message", (topic, message) => {
     console.log(`Received data:\n${message.toString()}`);
     create(message);
-
 });
 
 // FUNCIONES ***************************************************************

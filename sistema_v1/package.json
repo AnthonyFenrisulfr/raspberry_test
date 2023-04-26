@@ -2,9 +2,9 @@
   "name": "mqtt_prueba",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "broker.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon broker.js"
   },
   "keywords": [],
   "author": "",
