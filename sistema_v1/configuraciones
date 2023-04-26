@@ -48,7 +48,7 @@ Configuración del entorno para el uso de la Raspberry Pi 3 V2.
 -Instalar Git
     sudo apt install git
 
--Instalat Visual Studio Code
+-Instalar Visual Studio Code
     sudo apt update
     nvm install node
 
